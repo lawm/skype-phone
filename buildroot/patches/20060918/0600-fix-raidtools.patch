@@ -1,0 +1,19 @@
+Fix make rule because Make complains
+
+package/raidtools/raidtools.mk:45: *** missing separator (did you mean TAB instead
+        of 8 spaces?).  Stop.
+
+
+diff --git buildroot-20060918/package/raidtools/raidtools.mk buildroot-20060918/package/raidtools/raidtools.mk
+index 2f32b8c..a4b3f8b 100644
+--- buildroot-20060918/package/raidtools/raidtools.mk
++++ buildroot-20060918/package/raidtools/raidtools.mk
+@@ -42,7 +42,7 @@ $(RAIDTOOLS2_DIR)/.configured: $(RAIDTOOLS2_DIR)/.unpacked
+ 	touch $(RAIDTOOLS2_DIR)/.configured
+ 
+ $(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY): $(RAIDTOOLS2_DIR)/.configured
+-        $(MAKE) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR)
++	$(MAKE) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR)
+ 
+ $(TARGET_DIR)/$(RAIDTOOLS2_TARGET_BINARY): $(RAIDTOOLS2_DIR)/$(RAIDTOOLS2_BINARY)
+ 	$(MAKE) ROOTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(RAIDTOOLS2_DIR) install

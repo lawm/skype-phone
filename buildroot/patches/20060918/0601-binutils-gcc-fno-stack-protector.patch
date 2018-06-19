@@ -1,0 +1,45 @@
+binutils, gcc: Disable stack checks to fix crash when compiling
+
+ *** buffer overflow detected ***: mips-linux-uclibc-ar terminated gcc
+
+
+diff --git buildroot-20060918/toolchain/binutils/binutils.mk buildroot-20060918/toolchain/binutils/binutils.mk
+index 2df68bd..d9fa04e 100644
+--- buildroot-20060918/toolchain/binutils/binutils.mk
++++ buildroot-20060918/toolchain/binutils/binutils.mk
+@@ -55,6 +55,7 @@ $(BINUTILS_DIR)/.patched: $(BINUTILS_DIR)/.unpacked
+ $(BINUTILS_DIR1)/.configured: $(BINUTILS_DIR)/.patched
+ 	mkdir -p $(BINUTILS_DIR1)
+ 	(cd $(BINUTILS_DIR1); \
++		CFLAGS="-fno-stack-protector -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0" \
+ 		CC="$(HOSTCC)" \
+ 		$(BINUTILS_DIR)/configure \
+ 		--prefix=$(STAGING_DIR) \
+diff --git buildroot-20060918/toolchain/gcc/gcc-uclibc-3.x.mk buildroot-20060918/toolchain/gcc/gcc-uclibc-3.x.mk
+index 55cb295..ab58afe 100644
+--- buildroot-20060918/toolchain/gcc/gcc-uclibc-3.x.mk
++++ buildroot-20060918/toolchain/gcc/gcc-uclibc-3.x.mk
+@@ -112,6 +112,7 @@ endif
+ $(GCC_BUILD_DIR1)/.configured: $(GCC_DIR)/.patched
+ 	mkdir -p $(GCC_BUILD_DIR1)
+ 	(cd $(GCC_BUILD_DIR1); PATH=$(TARGET_PATH) \
++		CFLAGS="-fno-stack-protector -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0" \
+ 		CC="$(HOSTCC)" \
+ 		$(GCC_DIR)/configure \
+ 		--prefix=$(STAGING_DIR) \
+@@ -168,6 +169,7 @@ $(GCC_BUILD_DIR2)/.configured: $(GCC_DIR)/.patched $(STAGING_DIR)/lib/libc.a
+ 	# Important!  Required for limits.h to be fixed.
+ 	ln -snf ../include $(STAGING_DIR)/$(REAL_GNU_TARGET_NAME)/sys-include
+ 	(cd $(GCC_BUILD_DIR2); PATH=$(TARGET_PATH) \
++		CFLAGS="-fno-stack-protector -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0" \
+ 		CC="$(HOSTCC)" \
+ 		$(GCC_DIR)/configure \
+ 		--prefix=$(STAGING_DIR) \
+@@ -288,6 +290,7 @@ GCC_BUILD_DIR3:=$(BUILD_DIR)/gcc-$(GCC_VERSION)-target
+ $(GCC_BUILD_DIR3)/.configured: $(GCC_BUILD_DIR2)/.installed
+ 	mkdir -p $(GCC_BUILD_DIR3)
+ 	(cd $(GCC_BUILD_DIR3); PATH=$(TARGET_PATH) \
++		CFLAGS="-fno-stack-protector -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0" \
+ 		$(GCC_DIR)/configure \
+ 		--prefix=/usr \
+ 		--build=$(GNU_HOST_NAME) \

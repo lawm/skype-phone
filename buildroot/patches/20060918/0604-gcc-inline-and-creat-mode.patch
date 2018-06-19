@@ -1,0 +1,70 @@
+Add patch for gcc to fix compile
+
+diff --git buildroot-20060918/toolchain/gcc/3.4.6/950-inline-and-creat-mode.patch buildroot-20060918/toolchain/gcc/3.4.6/950-inline-and-creat-mode.patch
+new file mode 100644
+index 0000000..fb69186
+--- /dev/null
++++ buildroot-20060918/toolchain/gcc/3.4.6/950-inline-and-creat-mode.patch
+@@ -0,0 +1,62 @@
++add mode to open() call, fix inline attribute to fix compile
++
++In newer gcc, open() with O_CREAT requires the file mode to be specified.
++
++The inline attribute is added to fix the error:
++  cp/except.o: In function `nothrow_libfn_p':
++  except.c:(.text+0x160a): undefined reference to `libc_name_p'
++
++From [PATCH] cfns: fix mismatch in gnu_inline attributes
++  https://gcc.gnu.org/ml/gcc-patches/2015-08/msg00375.html
++
++diff --git gcc-3.4.6/gcc/collect2.c gcc-3.4.6/gcc/collect2.c
++index 33206f5..dd952b0 100644
++--- gcc-3.4.6/gcc/collect2.c
+++++ gcc-3.4.6/gcc/collect2.c
++@@ -1534,7 +1534,7 @@ collect_execute (const char *prog, char **argv, const char *redir)
++   if (redir)
++     {
++       /* Open response file.  */
++-      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT);
+++      redir_handle = open (redir, O_WRONLY | O_TRUNC | O_CREAT, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
++ 
++       /* Duplicate the stdout and stderr file handles
++ 	 so they can be restored later.  */
++diff --git gcc-3.4.6/gcc/cp/cfns.gperf gcc-3.4.6/gcc/cp/cfns.gperf
++index c713eb0..75f41f1 100644
++--- gcc-3.4.6/gcc/cp/cfns.gperf
+++++ gcc-3.4.6/gcc/cp/cfns.gperf
++@@ -5,6 +5,9 @@ __inline
++ static unsigned int hash (const char *, unsigned int);
++ #ifdef __GNUC__
++ __inline
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ #endif
++ const char * libc_name_p (const char *, unsigned int);
++ %}
++diff --git gcc-3.4.6/gcc/cp/cfns.h gcc-3.4.6/gcc/cp/cfns.h
++index 5dc71ce..1fd0ec6 100644
++--- gcc-3.4.6/gcc/cp/cfns.h
+++++ gcc-3.4.6/gcc/cp/cfns.h
++@@ -36,6 +36,9 @@ __inline
++ static unsigned int hash (const char *, unsigned int);
++ #ifdef __GNUC__
++ __inline
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ #endif
++ const char * libc_name_p (const char *, unsigned int);
++ /* maximum key range = 391, duplicates = 0 */
++@@ -108,6 +111,9 @@ hash (register const char *str, register unsigned int len)
++ #ifdef __GNUC__
++ __inline
++ #endif
+++#ifdef __GNUC_STDC_INLINE__
+++__attribute__ ((__gnu_inline__))
+++#endif
++ const char *
++ libc_name_p (register const char *str, register unsigned int len)
++ {

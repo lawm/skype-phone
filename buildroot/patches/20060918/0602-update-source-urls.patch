@@ -1,0 +1,67 @@
+Update source package urls
+
+diff --git buildroot-20060918/toolchain/kernel-headers/kernel-headers.mk buildroot-20060918/toolchain/kernel-headers/kernel-headers.mk
+index 7fc708a..fa9c3fc 100644
+--- buildroot-20060918/toolchain/kernel-headers/kernel-headers.mk
++++ buildroot-20060918/toolchain/kernel-headers/kernel-headers.mk
+@@ -79,7 +79,7 @@ ifeq ("$(strip $(DEFAULT_KERNEL_HEADERS))","2.6.12")
+ VERSION:=2
+ PATCHLEVEL:=6
+ SUBLEVEL:=12
+-LINUX_HEADERS_SITE:=http://ep09.pld-linux.org/~mmazur/linux-libc-headers/
++LINUX_HEADERS_SITE:=http://ftp.netinch.com/pub/LFS/lfs-packages/conglomeration/linux-libc-headers/
+ LINUX_HEADERS_SOURCE:=linux-libc-headers-2.6.12.0.tar.bz2
+ LINUX_HEADERS_UNPACK_DIR:=$(TOOL_BUILD_DIR)/linux-libc-headers-2.6.12.0
+ endif
+diff --git buildroot-20060918/toolchain/uClibc/uclibc.mk buildroot-20060918/toolchain/uClibc/uclibc.mk
+index 914cdec..e3b79cf 100644
+--- buildroot-20060918/toolchain/uClibc/uclibc.mk
++++ buildroot-20060918/toolchain/uClibc/uclibc.mk
+@@ -22,7 +22,7 @@ else
+ UCLIBC_VER:=0.9.28
+ UCLIBC_DIR:=$(TOOL_BUILD_DIR)/uClibc-$(UCLIBC_VER)
+ UCLIBC_SOURCE:=uClibc-$(UCLIBC_VER).tar.bz2
+-UCLIBC_SITE:=http://www.uclibc.org/downloads
++UCLIBC_SITE:=http://www.uclibc.org/downloads/old-releases
+ endif
+ 
+ UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
+diff --git buildroot-20060918/package/curl/curl.mk buildroot-20060918/package/curl/curl.mk
+index 01cc5ad..5ccabd8 100644
+--- buildroot-20060918/package/curl/curl.mk
++++ buildroot-20060918/package/curl/curl.mk
+@@ -4,7 +4,7 @@
+ 
+ CURL_VER:=7.15.5
+ CURL_SOURCE:=curl-$(CURL_VER).tar.gz
+-CURL_SITE:=http://curl.haxx.se/download
++CURL_SITE:=https://ftp.sunet.se/mirror/archive/ftp.sunet.se/pub/www/utilities/curl/
+ CURL_DIR=$(BUILD_DIR)/curl-$(CURL_VER)
+ CURL_TARGET_BINARY:=$(STAGING_DIR)/bin/curl
+ 
+diff --git buildroot-20060918/package/ltrace/ltrace.mk buildroot-20060918/package/ltrace/ltrace.mk
+index 0c7b542..74ec01b 100644
+--- buildroot-20060918/package/ltrace/ltrace.mk
++++ buildroot-20060918/package/ltrace/ltrace.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ LTRACE_SOURCE=ltrace_0.3.36.orig.tar.gz
+ LTRACE_SOURCE2=ltrace_0.3.36-2.diff.gz
+-LTRACE_SITE=http://ftp.debian.org/debian/pool/main/l/ltrace
++LTRACE_SITE=http://archive.debian.org/debian-archive/debian/pool/main/l/ltrace
+ LTRACE_DIR=$(BUILD_DIR)/ltrace-0.3.36
+ LTRACE_BINARY=ltrace
+ LTRACE_TARGET_BINARY=usr/bin/ltrace
+diff --git buildroot-20060918/package/strace/strace.mk buildroot-20060918/package/strace/strace.mk
+index 996f4ed..04a0ebe 100644
+--- buildroot-20060918/package/strace/strace.mk
++++ buildroot-20060918/package/strace/strace.mk
+@@ -5,7 +5,7 @@
+ #############################################################
+ STRACE_VER:=4.5.12
+ STRACE_SOURCE:=strace-$(STRACE_VER).tar.bz2
+-STRACE_SITE:=http://$(BR2_SOURCEFORGE_MIRROR).dl.sourceforge.net/sourceforge/strace
++STRACE_SITE:=https://strace.io/files/$(STRACE_VER)
+ STRACE_CAT:=bzcat
+ STRACE_DIR:=$(BUILD_DIR)/strace-$(STRACE_VER)
+ 

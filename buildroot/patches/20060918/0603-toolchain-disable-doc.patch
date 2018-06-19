@@ -1,0 +1,94 @@
+Add a buildroot binutils patch to disable some doc commands
+
+diff --git buildroot-20060918/toolchain/binutils/2.16.1/900-disable-doc.patch buildroot-20060918/toolchain/binutils/2.16.1/900-disable-doc.patch
+new file mode 100644
+index 0000000..8b2d36b
+--- /dev/null
++++ buildroot-20060918/toolchain/binutils/2.16.1/900-disable-doc.patch
+@@ -0,0 +1,86 @@
++Disable makeinfo/texinfo and a related rule to fix compile
++
++Some makeinfo commands error out and there is a problem with
++the rule prepending './' to an absolute path.
++
++Docs are unneeded, so simply disable the commands
++
++diff --git binutls/bfd/doc/Makefile.in binutls/bfd/doc/Makefile.in
++index 8df56ac..a6d82b9 100644
++--- binutls/bfd/doc/Makefile.in
+++++ binutls/bfd/doc/Makefile.in
++@@ -364,7 +364,7 @@ distclean-libtool:
++ 	  if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++ 	done; \
++ 	cd "$$am__cwd"; \
++-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+++	if true $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++ 	 -o $@ $<; \
++ 	then \
++ 	  rc=0; \
++@@ -374,7 +374,7 @@ distclean-libtool:
++ 	  cd $(srcdir) && \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++-	rm -rf $$backupdir; exit $$rc
+++	echo rm -rf $$backupdir; exit $$rc
++ 
++ .texinfo.dvi:
++ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
++diff --git binutls/gas/doc/Makefile.in binutls/gas/doc/Makefile.in
++index e1ebcc2..bd0cccb 100644
++--- binutls/gas/doc/Makefile.in
+++++ binutls/gas/doc/Makefile.in
++@@ -306,7 +306,7 @@ distclean-libtool:
++ 	  if test -f $$f; then mv $$f $$backupdir; restore=mv; else :; fi; \
++ 	done; \
++ 	cd "$$am__cwd"; \
++-	if $(MAKEINFO) $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
+++	if true $(AM_MAKEINFOFLAGS) $(MAKEINFOFLAGS) -I $(srcdir) \
++ 	 -o $@ $<; \
++ 	then \
++ 	  rc=0; \
++@@ -316,7 +316,7 @@ distclean-libtool:
++ 	  cd $(srcdir) && \
++ 	  $$restore $$backupdir/* `echo "./$@" | sed 's|[^/]*$$||'`; \
++ 	fi; \
++-	rm -rf $$backupdir; exit $$rc
+++	echo rm -rf $$backupdir; exit $$rc
++ 
++ .texinfo.dvi:
++ 	TEXINPUTS="$(am__TEXINFO_TEX_DIR)$(PATH_SEPARATOR)$$TEXINPUTS" \
++diff --git binutls/ld/Makefile.am binutls/ld/Makefile.am
++index dd590b0..c1ba5c6 100644
++--- binutls/ld/Makefile.am
+++++ binutls/ld/Makefile.am
++@@ -1629,7 +1629,7 @@ ldver.texi: Makefile
++ 
++ ld.info: $(srcdir)/ld.texinfo configdoc.texi ldver.texi
++ 	@rm -f $@ $@-[0-9] $@-[0-9][0-9]
++-	$(MAKEINFO) -I $(srcdir) -I $(BFDDIR)/doc $(srcdir)/ld.texinfo
+++	true $(MAKEINFO) -I $(srcdir) -I $(BFDDIR)/doc $(srcdir)/ld.texinfo
++ 
++ ld.dvi: $(srcdir)/ld.texinfo configdoc.texi ldver.texi
++ 	TEXINPUTS=$(top_srcdir)/../texinfo:$$TEXINPUTS \
++diff --git binutls/ld/Makefile.in binutls/ld/Makefile.in
++index eb59a9f..b32138e 100644
++--- binutls/ld/Makefile.in
+++++ binutls/ld/Makefile.in
++@@ -752,7 +752,7 @@ DVIPS = dvips
++ 
++ .texi.info:
++ 	@rm -f $@ $@-[0-9] $@-[0-9][0-9]
++-	$(MAKEINFO) -I $(srcdir) $<
+++	true $(MAKEINFO) -I $(srcdir) $<
++ 
++ .texi.dvi:
++ 	TEXINPUTS=$(top_srcdir)/../texinfo/texinfo.tex:$$TEXINPUTS \
++@@ -2355,7 +2355,7 @@ ldver.texi: Makefile
++ 
++ ld.info: $(srcdir)/ld.texinfo configdoc.texi ldver.texi
++ 	@rm -f $@ $@-[0-9] $@-[0-9][0-9]
++-	$(MAKEINFO) -I $(srcdir) -I $(BFDDIR)/doc $(srcdir)/ld.texinfo
+++	true $(MAKEINFO) -I $(srcdir) -I $(BFDDIR)/doc $(srcdir)/ld.texinfo
++ 
++ ld.dvi: $(srcdir)/ld.texinfo configdoc.texi ldver.texi
++ 	TEXINPUTS=$(top_srcdir)/../texinfo:$$TEXINPUTS \

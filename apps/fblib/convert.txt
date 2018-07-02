@@ -1,0 +1,3 @@
+  707  sudo apt install --no-install-recommends ffmpeg
+  727  ffmpeg -vcodec png -i tux-resized.png -vcodec rawvideo -f rawvideo -pix_fmt rgb565 tux.rgb
+  733  ffmpeg -vcodec rawvideo -f rawvideo -pix_fmt rgb565 -s 128x151 -i tux.rgb -f image2 -vcodec png image.png

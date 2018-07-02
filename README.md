@@ -1,10 +1,11 @@
-# Freetalk SP2014 / ... / Belkin ..... patches
+# Freetalk TALK-3000 SP2014 / ECO XS2008CA / Belkin Desktop Internet Phone for Skype F1PP010EN-SK patches
 
-These are changes to be overlaid on top of original GPL source
-for the Freetalk SP2014 / ... / Belkin .... Skype phone.
+These are changes to be overlaid on top of original GPL source for the Freetalk
+TALK-3000 SP2014 / ECO XS2008CA / Belkin Desktop Internet Phone for Skype
+F1PP010EN-SK phone.
 
-It disables unneeded packages, updates URLs and fixes compilation
-on a modern Ubuntu system
+It disables unneeded packages, updates URLs and fixes compilation on a modern
+Ubuntu system.
 
 More info at https://lawm.github.io/2018/06/16/skype-phone.html
 
